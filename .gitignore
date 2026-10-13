@@ -1,0 +1,4 @@
+.DS_Store
+# Archivos locales y con secretos: nunca al repo
+*.local
+config/gh/hosts.yml

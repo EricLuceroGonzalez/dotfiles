@@ -1,0 +1,30 @@
+[user]
+	name = Eric Lucero González
+	email = ericlucerogonzalez@gmail.com
+[core]
+	editor = code --wait
+	excludesfile = ~/.gitignore_global
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true     # el primer push de una rama crea su rama remota
+[fetch]
+	prune = true               # borra referencias a ramas remotas eliminadas
+[color]
+	ui = auto
+[alias]
+	st = status -sb
+	lg = log --oneline --graph --decorate -20
+	pretty = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative
+	undo = reset --soft HEAD~1 # deshace el último commit conservando los cambios
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+# Identidad del doctorado en ~/Developer/phd/ (edita ~/.gitconfig-phd)
+[includeIf "gitdir:~/Developer/phd/"]
+	path = ~/.gitconfig-phd

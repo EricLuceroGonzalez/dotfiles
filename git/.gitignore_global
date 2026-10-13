@@ -1,0 +1,15 @@
+# Ignorado en todos los repos de esta Mac
+
+# macOS
+.DS_Store
+._*
+.AppleDouble
+
+# Secretos: red de seguridad por si un proyecto olvida ignorarlos
+.env
+.env.local
+.env.*.local
+
+# Editores
+*.swp
+.idea/
