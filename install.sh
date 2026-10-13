@@ -33,6 +33,7 @@ link npm/.npmrc              "$HOME/.npmrc"
 echo "Apps en ~/.config"
 link config/gh/config.yml    "$HOME/.config/gh/config.yml"
 link config/linearmouse/linearmouse.json "$HOME/.config/linearmouse/linearmouse.json"
+link latex/.latexmkrc        "$HOME/.latexmkrc"
 
 if [[ -f "$DOT/Brewfile" ]] && command -v brew > /dev/null; then
   echo "Homebrew"
