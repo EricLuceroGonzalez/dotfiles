@@ -4,6 +4,7 @@
 alias dev='cd "$DEV"'
 alias atco='cd "$DEV/phd/atco_brkga"'
 alias inbox_go='cd "$ACADEMIC/00-Papers/_Inbox"'
+alias latex_go='cd "$DEV/tools/latex/Texmf/tex/latex"'
 alias slipbox_go='cd "$SLIPBOX_DIR/notes/slipbox"'
 
 # Git
