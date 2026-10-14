@@ -54,6 +54,8 @@ brew "ripgrep"
 brew "starship"
 # Manipulate and query tags on macOS files
 brew "tag"
+# Extremely fast LaTeX formatter written in Rust
+brew "tex-fmt"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Maintained ctags implementation
@@ -68,6 +70,7 @@ brew "zoxide"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+cask "font-jetbrains-mono-nerd-font"
 # Customise mouse behavior
 cask "linearmouse"
 # Break time reminder app
