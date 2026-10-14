@@ -2,7 +2,7 @@
 
 # Navegación (actualiza las rutas al migrar cada proyecto a ~/Developer)
 alias dev='cd "$DEV"'
-alias atco='cd "$DEV/phd/atco-brkga"'
+alias atco='cd "$DEV/phd/atco_brkga"'
 alias inbox_go='cd "$ACADEMIC/00-Papers/_Inbox"'
 alias slipbox_go='cd "$SLIPBOX_DIR/notes/slipbox"'
 

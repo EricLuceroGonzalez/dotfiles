@@ -1,4 +1,4 @@
-# papers — organizador de papers académicos (proyecto File_toucher)
+# papers — organizador de papers académicos (proyecto file_organizer)
 #
 # Uso: papers <comando> [--folder <ruta>] [opciones]
 # Sin --folder, trabaja sobre la carpeta actual.
@@ -15,7 +15,7 @@
 #   cd "$ACADEMIC/00-Papers/IA" && papers list-papers --classify --output ~/Desktop/papers_ia.md
 #   papers fix-underscores --dry-run
 
-export PAPERS_PROJECT="$ACADEMIC/Python_Fun/Random_projcts/File_toucher"
+export PAPERS_PROJECT="$DEV/projects/file_organizer"
 export PAPERS_INBOX="$ACADEMIC/00-Papers/_Inbox"
 
 papers() {
