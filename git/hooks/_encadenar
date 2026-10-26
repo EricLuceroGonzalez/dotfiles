@@ -1,0 +1,27 @@
+#!/bin/sh
+# Hooks globales: Git ejecuta los de esta carpeta (core.hooksPath) en lugar de los de cada repo.
+# Este script, enlazado con el nombre de cada hook (commit-msg, pre-push…), hace lo que harían
+# los del repo, para no desactivarlos:
+#   1. Si el repo usa Git LFS, ejecuta el hook de LFS (sin él, LFS no sube los archivos grandes).
+#   2. Ejecuta el hook propio del repo (.git/hooks/<nombre>), si existe: pre-commit, husky…
+hook="$(basename "$0")"
+git_dir="$(git rev-parse --git-dir)"
+
+# pre-push y post-rewrite reciben datos por la entrada estándar: se guardan para pasarlos a los dos
+con_entrada=0; entrada=""
+case "$hook" in pre-push|post-rewrite) con_entrada=1; entrada="$(cat)" ;; esac
+
+case "$hook" in
+  pre-push|post-checkout|post-commit|post-merge)
+    if command -v git-lfs >/dev/null 2>&1 && grep -qs 'filter=lfs' .gitattributes; then
+      printf '%s\n' "$entrada" | git lfs "$hook" "$@" || exit $?
+    fi ;;
+esac
+
+local_hook="$git_dir/hooks/$hook"
+[ -x "$local_hook" ] || exit 0
+if [ "$con_entrada" = 1 ]; then
+  printf '%s\n' "$entrada" | "$local_hook" "$@"
+else
+  exec "$local_hook" "$@"
+fi

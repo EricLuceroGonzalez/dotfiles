@@ -1,0 +1,30 @@
+#!/bin/sh
+# Hook global de Git: se ejecuta antes de cada commit, en todos tus repos.
+# Lo activa .gitconfig con:  [core] hooksPath = ~/Developer/tools/dotfiles/git/hooks
+#
+# 1. Revisa con gitleaks lo que vas a commitear (solo los cambios en el índice) y,
+#    si encuentra un posible secreto, cancela el commit.
+# 2. Después ejecuta el hook propio del repo (.git/hooks/pre-commit), si lo tiene,
+#    para no desactivar los de pre-commit, husky, etc.
+#
+# Falso positivo: añade su Fingerprint a .gitleaksignore en ese repo,
+# o sáltate la revisión una vez con: git commit --no-verify
+
+if command -v gitleaks >/dev/null 2>&1; then
+  if ! gitleaks git --pre-commit --staged --redact --no-banner --verbose --log-level=warn; then
+    echo >&2
+    echo "✗ Commit cancelado: gitleaks encontró posibles secretos (arriba, ocultos)." >&2
+    echo "  Sácalos del commit: git restore --staged <archivo>, y ponlos en .env (ignorado)." >&2
+    echo "  Si es un falso positivo: añade su Fingerprint a .gitleaksignore." >&2
+    exit 1
+  fi
+else
+  echo "⚠ gitleaks no está instalado: commit sin revisar secretos (brew install gitleaks)." >&2
+fi
+
+# Hook propio del repo, si existe
+hook_local="$(git rev-parse --git-dir)/hooks/pre-commit"
+if [ -x "$hook_local" ]; then
+  exec "$hook_local" "$@"
+fi
+exit 0
