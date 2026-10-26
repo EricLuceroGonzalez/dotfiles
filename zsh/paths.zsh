@@ -4,8 +4,12 @@
 export DEV="$HOME/Developer"
 export ACADEMIC="$HOME/Documents/Academic"
 
+# Paths de backup
+export BACKUP_VOLUME="EricLuceroUSB"
+export BACKUP_SOURCES="$DEV $HOME/Documents" 
+
 # Scripts propios
-export PATH="$DEV/tools/scripts/bin:$PATH"
+export PATH="$PATH:$DEV/tools/scripts/bin"
 
 # LaTeX (MacTeX)
 export PATH="/Library/TeX/texbin:$PATH"

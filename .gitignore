@@ -1,4 +1,15 @@
 .DS_Store
-# Archivos locales y con secretos: nunca al repo
 *.local
+*.backup
+# Tokens y credenciales que escriben las herramientas
 config/gh/hosts.yml
+.npmrc
+.netrc
+.pypirc
+*.pem
+*.key
+id_*
+.ssh/
+# Historiales: contienen comandos con contraseñas y rutas
+*history*
+.zcompdump*
