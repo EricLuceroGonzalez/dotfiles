@@ -30,5 +30,7 @@ source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.z
 # Prompt
 eval "$(starship init zsh)"
 
+# zoxide tool to cd command
+eval "$(zoxide init zsh)"
 # Sin duplicados en el PATH
 typeset -U path
