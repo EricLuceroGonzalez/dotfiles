@@ -7,20 +7,48 @@
 #   pbuscar -a trajectory         incluye Old_folders
 #   pbuscar -c "air traffic"      busca DENTRO de los PDF (Spotlight)
 #   previsar                      nombres raros, genéricos, duplicados y fuera de formato
+#                                 (válidos: AAAA-Titulo-(Autor).pdf y (AAAA)-Titulo-(Autor).pdf)
 
-: "${PHD_PAPERS:=$HOME/Documents/Academic/00-Papers/PhD_Pprs}"
+: "${PHD_PAPERS:=$HOME/Documents/Academic/Phd_papers}"
+
+_pbuscar_ayuda() {
+  cat <<EOF
+pbuscar — busca papers por su nombre de archivo (o por su contenido) en tu biblioteca.
+
+Uso: pbuscar [opciones] término [término…]
+
+  No distingue mayúsculas ni tildes. Con varios términos, el archivo debe
+  contenerlos todos ("nurse annealing" = nurse Y annealing).
+
+Opciones:
+  -a          incluye Old_folders (por defecto se omite)
+  -c          busca dentro de los PDF con Spotlight, no en el nombre
+  -h, --help  muestra esta ayuda
+
+Ejemplos:
+  pbuscar nurse                    nombres con "nurse", "Nurse"…
+  pbuscar nurse annealing          con las dos palabras
+  pbuscar Jiménez                  funciona con tildes
+  pbuscar -a trajectory            incluye Old_folders
+  pbuscar -c "air traffic"         en el texto de los PDF
+
+Biblioteca: ${PHD_PAPERS}   (cámbiala con PHD_PAPERS en ~/.zshrc.local)
+Ver también: previsar --help
+EOF
+}
 
 pbuscar() {
   local dir="$PHD_PAPERS" todo=0 contenido=0
   while [[ $1 == -* ]]; do
     case $1 in
-      -a) todo=1 ;;
-      -c) contenido=1 ;;
-      *)  echo "Opción desconocida: $1" >&2; return 1 ;;
+      -a)        todo=1 ;;
+      -c)        contenido=1 ;;
+      -h|--help) _pbuscar_ayuda; return 0 ;;
+      *)         echo "Opción desconocida: $1 (usa pbuscar --help)" >&2; return 1 ;;
     esac
     shift
   done
-  (( $# )) || { echo "Uso: pbuscar [-a] [-c] término [término…]" >&2; return 1; }
+  (( $# )) || { _pbuscar_ayuda >&2; return 1; }
   [[ -d $dir ]] || { echo "No existe $dir: define PHD_PAPERS en ~/.zshrc.local" >&2; return 1; }
 
   local -a res
@@ -46,6 +74,19 @@ pbuscar() {
 }
 
 previsar() {
+  if [[ $1 == -h || $1 == --help ]]; then
+    cat <<EOF
+previsar — revisa los nombres de los archivos de la biblioteca y lista lo que conviene arreglar.
+
+Uso: previsar [carpeta]     (por defecto: ${PHD_PAPERS})
+
+Muestra, por grupos: ligaduras (ﬀ ﬁ…), caracteres mal codificados, nombres que no
+dicen nada, copias y temporales, extensión repetida, erratas conocidas, nombres
+con espacios, los que no siguen AAAA-Titulo-(Autor).pdf ni (AAAA)-Titulo-(Autor).pdf,
+y los archivos que no son PDF. Omite Old_folders. No cambia nada.
+EOF
+    return 0
+  fi
   local dir="${1:-$PHD_PAPERS}"
   [[ -d $dir ]] || { echo "No existe $dir" >&2; return 1; }
   local lista
@@ -66,13 +107,12 @@ previsar() {
   _seccion "Copias y temporales"                                      ' (copy|2)\.[a-z]+$|copia|~\$'
   _seccion "Extensión repetida"                                       'pdf\.pdf$'
   _seccion "Erratas conocidas"                                        'creo-size'
-  _seccion "Año entre paréntesis: (2026)-…"                           '(^|/)\([0-9]{4}\)'
   _seccion "Con espacios (mejor guiones)"                             '[^/]* [^/]*\.pdf$'
   # Esta sección niega el patrón, así que va aparte
   local fuera
-  fuera="$(printf '%s\n' "$lista" | grep -E '\.pdf$' | grep -vE '(^|/)[0-9]{4}-[^/ ]+-\([^/]+\)\.pdf$')"
+  fuera="$(printf '%s\n' "$lista" | grep -E '\.pdf$' | grep -vE '(^|/)(\([0-9]{4}\)|[0-9]{4})-[^/ ]+-\([^/]+\)\.pdf$')"
   if [[ -n $fuera ]]; then
-    print -P "\n%BFuera del formato AAAA-Titulo-(Autor).pdf%b ($(printf '%s\n' "$fuera" | wc -l | tr -d ' '))"
+    print -P "\n%BFuera del formato AAAA-Titulo-(Autor).pdf o (AAAA)-Titulo-(Autor).pdf%b ($(printf '%s\n' "$fuera" | wc -l | tr -d ' '))"
     printf '%s\n' "$fuera" | sed 's/^/  /'
   fi
   print -P "\n%BNo son PDF%b"
