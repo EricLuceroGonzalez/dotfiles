@@ -10,6 +10,7 @@ export BACKUP_SOURCES="$DEV $HOME/Documents"
 
 # Scripts propios
 export PATH="$PATH:$DEV/tools/scripts/bin"
+export ALL_PAPERS="$HOME/Documents/Academic/00-Papers"
 export PHD_PAPERS="$HOME/Documents/Academic/00-Papers/PhD_Pprs"
 
 # LaTeX (MacTeX)

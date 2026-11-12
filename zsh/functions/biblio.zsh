@@ -1,6 +1,6 @@
 # biblio.zsh — buscar y revisar la biblioteca de papers del doctorado
 # Va en ~/Developer/tools/dotfiles/zsh/functions/. Define dónde está la biblioteca en
-# ~/.zshrc.local:  export PHD_PAPERS="$HOME/ruta/a/Phd_papers"
+# ~/.zshrc.local:  export PAPERS_FILES="$HOME/ruta/a/Phd_papers"
 #
 #   pbuscar nurse                 nombres que contienen "nurse" (sin distinguir mayúsculas)
 #   pbuscar nurse annealing       los que contienen las dos palabras
@@ -9,7 +9,7 @@
 #   previsar                      nombres raros, genéricos, duplicados y fuera de formato
 #                                 (válidos: AAAA-Titulo-(Autor).pdf y (AAAA)-Titulo-(Autor).pdf)
 
-: "${PHD_PAPERS:=$HOME/Documents/Academic/Phd_papers}"
+SEARCH_FOLDERS=$ALL_PAPERS
 
 _pbuscar_ayuda() {
   cat <<EOF
@@ -32,13 +32,13 @@ Ejemplos:
   pbuscar -a trajectory            incluye Old_folders
   pbuscar -c "air traffic"         en el texto de los PDF
 
-Biblioteca: ${PHD_PAPERS}   (cámbiala con PHD_PAPERS en ~/.zshrc.local)
+Biblioteca: ${SEARCH_FOLDERS}   (cámbiala con PAPERS_FILES en ~/.zshrc.local)
 Ver también: previsar --help
 EOF
 }
 
 pbuscar() {
-  local dir="$PHD_PAPERS" todo=0 contenido=0
+  local dir="$SEARCH_FOLDERS" todo=0 contenido=0
   while [[ $1 == -* ]]; do
     case $1 in
       -a)        todo=1 ;;
@@ -49,7 +49,7 @@ pbuscar() {
     shift
   done
   (( $# )) || { _pbuscar_ayuda >&2; return 1; }
-  [[ -d $dir ]] || { echo "No existe $dir: define PHD_PAPERS en ~/.zshrc.local" >&2; return 1; }
+  [[ -d $dir ]] || { echo "No existe $dir: define SEARCH_FOLDERS en ~/.zshrc.local" >&2; return 1; }
 
   local -a res
   if (( contenido )); then
@@ -78,7 +78,7 @@ previsar() {
     cat <<EOF
 previsar — revisa los nombres de los archivos de la biblioteca y lista lo que conviene arreglar.
 
-Uso: previsar [carpeta]     (por defecto: ${PHD_PAPERS})
+Uso: previsar [carpeta]     (por defecto: ${SEARCH_FOLDERS})
 
 Muestra, por grupos: ligaduras (ﬀ ﬁ…), caracteres mal codificados, nombres que no
 dicen nada, copias y temporales, extensión repetida, erratas conocidas, nombres
@@ -87,7 +87,7 @@ y los archivos que no son PDF. Omite Old_folders. No cambia nada.
 EOF
     return 0
   fi
-  local dir="${1:-$PHD_PAPERS}"
+  local dir="${1:-$SEARCH_FOLDERS}"
   [[ -d $dir ]] || { echo "No existe $dir" >&2; return 1; }
   local lista
   lista="$(cd "$dir" && find . -path ./Old_folders -prune -o -type f ! -name '.DS_Store' -print | sed 's|^\./||' \
