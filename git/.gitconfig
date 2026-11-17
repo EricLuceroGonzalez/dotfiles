@@ -29,3 +29,9 @@
 # Identidad del doctorado en ~/Developer/phd/ (edita ~/.gitconfig-phd)
 [includeIf "gitdir:~/Developer/phd/"]
 	path = ~/.gitconfig-phd
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
