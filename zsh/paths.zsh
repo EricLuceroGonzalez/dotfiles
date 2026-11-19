@@ -7,6 +7,9 @@ export ACADEMIC="$HOME/Documents/Academic"
 # Paths de backup
 export BACKUP_VOLUME="EricLuceroUSB"
 export BACKUP_SOURCES="$DEV $HOME/Documents" 
+# Paths del blog
+export POSTS_DIR="$DEV/web/EricLuceroBlog/app/_posts"
+export BLOG_DIR="$DEV/web/EricLuceroBlog" 
 
 # Scripts propios
 export PATH="$PATH:$DEV/tools/scripts/bin"
